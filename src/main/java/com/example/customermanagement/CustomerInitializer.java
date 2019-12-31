@@ -1,39 +1,37 @@
 package com.example.customermanagement;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.stream.Stream;
 
 @Component
 class CustomerInitializer {
 
-    private final CustomerRepository customerRepository;
+    private final CustomerRepository repository;
 
-    CustomerInitializer(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+    private final ObjectMapper mapper;
+
+    @Value("classpath:/data.json")
+    private Resource data;
+
+    CustomerInitializer(CustomerRepository repository, ObjectMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
     }
 
     @EventListener
-    void on(ApplicationReadyEvent event) {
-        Customer customer = new Customer();
-        customer.setFirstName("Anthony");
-        customer.setLastName("Slabinck");
-        customer.setEmailAddress("anthonyslabinck@hotmail.com");
+    void on(ApplicationReadyEvent event) throws IOException {
+        if (repository.count() > 0) {
+            return;
+        }
 
-        customerRepository.save(customer);
-
-        customer = new Customer();
-        customer.setFirstName("Neeltje");
-        customer.setLastName("Slabbinck");
-        customer.setEmailAddress("neeltje.slabbinck@hotmail.be");
-
-        customerRepository.save(customer);
-
-        customer = new Customer();
-        customer.setFirstName("Muriel");
-        customer.setLastName("Goegebeur");
-        customer.setEmailAddress("murielgoegebeur@gmail.com");
-
-        customerRepository.save(customer);
+        Stream.of(mapper.readValue(data.getFile(), Customer[].class))
+                .forEach(repository::save);
     }
 }
