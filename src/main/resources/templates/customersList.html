@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'customers')}">
+<body>
+<h1 class="h2">Customers</h1>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email Address</th>
+        <th>Phone Number</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-th-each="customer : ${customers}">
+        <td><a data-th-href="@{/customers/__${customer.id}__}"
+               data-th-text="${customer.firstName + ' ' + customer.lastName}"></a></td>
+        <td data-th-text="${customer.emailAddress}"></td>
+        <td data-th-text="${customer.phoneNumber}"></td>
+    </tr>
+    </tbody>
+</table>
+<a class="btn btn-primary" role="button" data-th-href="@{/customers/create}">Add Customer</a>
+</body>
+</html>

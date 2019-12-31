@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'customers')}">
+<body>
+<h1 class="h2">Customer Details</h1>
+<table class="table table-striped" data-th-object="${customer}">
+    <tbody>
+    <tr>
+        <th>Name</th>
+        <td><b data-th-text="*{firstName + ' ' + lastName}"></b></td>
+    </tr>
+    <tr>
+        <th>Email Address</th>
+        <td data-th-text="*{emailAddress}"></td>
+    </tr>
+    <tr>
+        <th>Phone Number</th>
+        <td data-th-text="*{phoneNumber}"></td>
+    </tr>
+    </tbody>
+</table>
+<a class="btn btn-primary" role="button" data-th-href="@{/customers/__${customer.id}__/edit}">Edit Customer</a>
+</body>
+</html>

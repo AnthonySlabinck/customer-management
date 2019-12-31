@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'customers')}">
+<body>
+<th:block th:insert="~{fragments/customerForm :: copy('Update Customer')}"></th:block>
+</body>
+</html>
